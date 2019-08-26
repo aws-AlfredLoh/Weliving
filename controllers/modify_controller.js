@@ -28,7 +28,6 @@ module.exports = class Member {
             toRegister(memberData).then(result => {
                 // 若寫入成功則回傳
                 res.json({
-                    status: "註冊成功。",
                     result: result 
                 })
             }, (err) => {
@@ -75,12 +74,32 @@ module.exports = class Member {
                         loginMember: "歡迎 " + rows[0].name + " 的登入！"
                     }
                 })
-
-
             }
-        })
+        })   
+    }
 
-        
+    postUpdate(req, res, next){
+        const token = req.header['token'];
+        if(check.checkNull(token) == true){
+            res.json({
+                err:"請輸入token！"
+            })
+        }else if(check.checkNull(token) == false){
+            verify(token).then(tokenResult => {
+                if(tokenResult == false){
+                    res.json({
+                        result:{
+                            status:"token錯誤。",
+                            err: "請重新登入。"
+                        }
+                    })
+                }else{
+                    res.json({
+                        test: "token正確"
+                    })
+                }
+            })
+        }
     }
 
     
