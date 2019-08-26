@@ -94,13 +94,29 @@ module.exports = class Member {
                         }
                     })
                 }else{
-                    res.json({
-                        test: "token正確"
+                    const id = tokenResult;
+                    const password = encryption(req.body.password);
+                    const memberUpdateData = {
+                        name: req.body.name,
+                        password: password,
+                        update_date: onTime()
+                    }
+                    updateAction(id, memberUpdateData).then(result => {
+                        res.json({
+                            result: result
+                        })
+                    },(err) => {
+                        res.json({
+                            result: err
+                        })
                     })
+
                 }
             })
         }
     }
+
+    
 
     
 }
